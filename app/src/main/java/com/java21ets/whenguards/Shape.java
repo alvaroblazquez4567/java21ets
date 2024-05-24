@@ -1,8 +1,4 @@
 package com.java21ets.whenguards;
 
-public sealed interface Shape permits Circle, Rectangle {
+public sealed interface Shape {
 }
-
-record Circle(double radius, String color) implements Shape { }
-
-record Rectangle(double width, double height, String color) implements Shape { }
