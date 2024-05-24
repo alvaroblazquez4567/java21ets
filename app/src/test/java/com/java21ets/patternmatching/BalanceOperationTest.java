@@ -3,6 +3,10 @@ package com.java21ets.patternmatching;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -59,16 +63,16 @@ class BalanceOperationTest {
     }
 
     @Test
-    @DisplayName("Test balance restoration performance with 1000 operations and get the execution time")
+    @DisplayName("Test balance restoration performance with 20.0000.000 operations and get the execution time")
     void testBalanceRestorationPerformance() {
         List<BalanceOperation> operations = new ArrayList<>(1000);
 
-        for (int i = 0; i < 10000000; i++) {
-            operations.add(new AddOperation(100));
+        for (int i = 0; i < 10_000_000; i++) {
+            operations.add(new AddOperation(725));
         }
 
-        for (int i = 0; i < 10000000; i++) {
-            operations.add(new SubtractOperation(100));
+        for (int i = 0; i < 10_000_000; i++) {
+            operations.add(new SubtractOperation(725));
         }
 
         Collections.shuffle(operations);
@@ -77,8 +81,52 @@ class BalanceOperationTest {
         Balance balance = new Balance(operations);
         long endTime = System.currentTimeMillis();
 
-        assertEquals(0, balance.getCurrentBalance());
-        System.out.println(balance.getCurrentBalance());
         System.out.println("Execution time: " + (endTime - startTime) + " ms");
+
+        assertEquals(0, balance.getCurrentBalance());
+    }
+
+    @Test
+    @DisplayName("Get the size in bytes of the serialized operation")
+    void testSizeOfSerializedOperation() {
+        BalanceOperation operation = new AddOperation(100);
+        byte[] serializedOperation = serializeBalance(operation);
+        assertEquals( 76, serializedOperation.length);
+    }
+
+    @Test
+    @DisplayName("Get the size in bytes of 100 serialized operation")
+    void testSizeOfSerializedOperations() {
+        List<BalanceOperation> operations = new ArrayList<>(100);
+        for (int i = 0; i < 100; i++) {
+            operations.add(new AddOperation(100));
+        }
+        byte[] serializedOperations = serializeBalances(operations);
+        assertEquals( 1120, serializedOperations.length);
+    }
+
+
+    private byte[] serializeBalances(List<BalanceOperation> operations) {
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            oos.writeObject(operations);
+            oos.flush();
+            return bos.toByteArray();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to serialize operations", e);
+        }
+    }
+
+    byte[] serializeBalance(BalanceOperation operation) {
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            oos.writeObject(operation);
+            oos.flush();
+            return bos.toByteArray();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to serialize operation", e);
+        }
     }
 }
