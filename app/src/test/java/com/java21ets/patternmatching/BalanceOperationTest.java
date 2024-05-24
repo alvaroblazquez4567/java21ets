@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -91,7 +90,7 @@ class BalanceOperationTest {
     void testSizeOfSerializedOperation() {
         BalanceOperation operation = new AddOperation(100);
         byte[] serializedOperation = serializeBalance(operation);
-        assertEquals( 76, serializedOperation.length);
+        assertEquals(76, serializedOperation.length);
     }
 
     @Test
@@ -102,7 +101,7 @@ class BalanceOperationTest {
             operations.add(new AddOperation(100));
         }
         byte[] serializedOperations = serializeBalances(operations);
-        assertEquals( 1120, serializedOperations.length);
+        assertEquals(1120, serializedOperations.length);
     }
 
 
