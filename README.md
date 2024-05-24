@@ -26,3 +26,13 @@ System.out.println(p.y()); // 2
 * Record patterns and destructuring in instanceof
 * Record patterns and destructuring in switch
 * Switch expressions with records
+* Exhaustiveness checking with switch expressions
+* Sealed classes and interfaces
+* Switch with guarded patterns
+* Switch handling null
+
+## Questions
+* Why use pattern matching over inheritance and method overriding in the balance use case?
+
+## Use cases
+* Use when you do not own the class hierarchy in which implement method overrides
